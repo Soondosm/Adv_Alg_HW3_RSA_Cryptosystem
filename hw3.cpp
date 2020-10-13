@@ -6,78 +6,93 @@
 #include <vector>
 
 using namespace std; 
-// find gcd
-int gcd(int a, int b) {
-   int t;
-   while(1) {
-      t= a%b;
-      if(t==0)
-      return b;
-      a = b;
-      b= t;
-   }
-}
 
-int * getArray(string M, unordered_map<char, int> BEARCATII) { // returns array of base 27 ints
-    static int array [sizeof(M)];
-    for (int i = 0; i < sizeof(M); i++) {
-        char element = M[i];
-        array[i] = BEARCATII[element];  
-        }
-    return array;
-}
+// IMPORTED FUNCTIONS:
 
-/**
- * Converts base 27 sequence of "TEST" string into a single decimal.
- * @param int array. Array of base 27 ints obtained from converting string into
- * base27. */
-int getDecimal(int array[]) {
-    int result = 0;
-    int power = 0;
-    for(int i = sizeof(*array)-1; i >= 0; i--) {
-        result = result + (array[i] * pow(27, power));
-        // the below line is edited-out code for only debugging purposes.
-        // cout << "POWER" << power << " ARRAY ELEMENT" << array[i] << " INDEX" << i << " CURRENTRESULT" << result << '\n';
-        power++; 
-    }
-    return result;
-}
+// FUNCTION OBTAINED FROM:
+// https://www.geeksforgeeks.org/sum-two-large-numbers/
+// Function for finding sum of larger numbers 
+string findSum(string str1, string str2) { 
+    // Before proceeding further, make sure length 
+    // of str2 is larger. 
+    if (str1.length() > str2.length()) 
+        swap(str1, str2); 
+    // Take an empty string for storing result 
+    string str = ""; 
+    // Calculate length of both string 
+    int n1 = str1.length(), n2 = str2.length(); 
+    // Reverse both of strings 
+    std::reverse(str1.begin(), str1.end()); 
+    std::reverse(str2.begin(), str2.end()); 
+    int carry = 0; 
+    for (int i=0; i<n1; i++) 
+    { 
+        // Do school mathematics, compute sum of 
+        // current digits and carry 
+        int sum = ((str1[i]-'0')+(str2[i]-'0')+carry); 
+        str.push_back(sum%10 + '0'); 
+        // Calculate carry for next step 
+        carry = sum/10; 
+    } 
+    // Add remaining digits of larger number 
+    for (int i=n1; i<n2; i++) 
+    { 
+        int sum = ((str2[i]-'0')+carry); 
+        str.push_back(sum%10 + '0'); 
+        carry = sum/10; 
+    } 
+    // Add remaining carry 
+    if (carry) 
+        str.push_back(carry+'0'); 
+    // std::reverse resultant string 
+    std::reverse(str.begin(), str.end()); 
+    return str; 
+} 
 
-string runDecrypt(int message, unordered_map<unsigned long long int, char> IITACREAB) {
-    int power = 0;
-    unsigned long long int size = sqrt(message);
-    unsigned long long int decryptArray[size];
-    string strM; // string message
-    int index = 0;
-    while(message > 0) {
-        unsigned long long int divided = message / 27;
-        decryptArray[index] = message % 27;
-        message = divided;
-        cout << "message num: " << decryptArray[index] << '\n';
-        index++;
-    }
-    int stringI = 0; // index for character position for our string output
-    for(index-1; index >= 0; index--) {
-        unsigned long long int base27 = decryptArray[index];
-        strM += IITACREAB[base27];
-        stringI++;
-        // the below line is edited-out code for only debugging purposes.
-        // cout << "POWER" << power << " ARRAY ELEMENT" << array[i] << " INDEX" << i << " CURRENTRESULT" << result << '\n';
-    }
-    return strM;
-}
+// FUNCTION OBTAINED FROM:
+// https://www.geeksforgeeks.org/divide-large-number-represented-string/
+// A function to perform division of large numbers 
+string longDivision(string number, int divisor) 
+{ 
+    // As result can be very large store it in string 
+    string ans; 
+    // Find prefix of number that is larger 
+    // than divisor. 
+    int idx = 0; 
+    int temp = number[idx] - '0'; 
+    while (temp < divisor) 
+        temp = temp * 10 + (number[++idx] - '0'); 
+    // Repeatedly divide divisor with temp. After 
+    // every division, update temp to include one 
+    // more digit. 
+    while (number.size() > idx) { 
+        // Store result in answer i.e. temp / divisor 
+        ans += (temp / divisor) + '0'; 
+  
+        // Take next digit of number 
+        temp = (temp % divisor) * 10 + number[++idx] - '0'; 
+    } 
+  
+    // If divisor is greater than number 
+    if (ans.length() == 0) 
+        return "0"; 
+  
+    // else return ans 
+    return ans; 
+} 
+
 
 // THIS FUNCTION IS PULLED FROM:
 // https://www.geeksforgeeks.org/multiply-large-numbers-represented-as-strings/
 // Multiplies str1 and str2, and prints result. 
-string multiply(string num1, string num2) 
-{ 
+string multiply(string num1, string num2) { 
     int len1 = num1.size(); 
     int len2 = num2.size(); 
     if (len1 == 0 || len2 == 0) 
     return "0"; 
+    // std::cout << num1 << "   .....   " << num2 << "\n"<<"\n";
     // will keep the result number in vector 
-    // in reverse order 
+    // in std::reverse order 
     vector<int> result(len1 + len2, 0); 
     // Below two indexes are used to find positions 
     // in result.  
@@ -101,15 +116,16 @@ string multiply(string num1, string num2)
             // at current position.  
             int sum = n1*n2 + result[i_n1 + i_n2] + carry; 
             // Carry for next iteration 
-            carry = sum/10; 
+            carry = sum/10;
+            if(carry < 0 || sum < 0) carry = 0;
             // Store result 
             result[i_n1 + i_n2] = sum % 10; 
             i_n2++; 
+            //std::cout << "n1:" << n1 << ", n2:" << n2 << '\n';         DEBUG
         } 
         // store carry in next cell 
         if (carry > 0) 
             result[i_n1 + i_n2] += carry; 
-  
         // To shift position to left after every 
         // multiplication of a digit in num1. 
         i_n1++; 
@@ -125,9 +141,88 @@ string multiply(string num1, string num2)
     // generate the result string 
     string s = ""; 
     while (i >= 0) 
-        s += std::to_string(result[i--]); 
+        s += to_string(result[i--]); 
     return s; 
 } 
+
+
+// ---------------------------------END IMPORTED FUNCTIONS---------------------
+
+
+
+// find gcd
+int gcd(int a, int b) {
+   int t;
+   while(1) {
+      t= a%b;
+      if(t==0)
+      return b;
+      a = b;
+      b= t;
+   }
+}
+
+int * getArray(string M, unordered_map<char, int> BEARCATII) { // returns array of base 27 ints
+    static int array [sizeof(M)];
+    for (int i = 0; i < sizeof(M); i++) {
+        char element = M[i];
+        array[i] = BEARCATII[element];
+        cout << "array item: " << array[i] << '\n';  
+        }
+    return array;
+}
+
+/**
+ * Converts base 27 sequence of "TEST" string into a single decimal.
+ * @param int array. Array of base 27 ints obtained from converting string into
+ * base27. */
+string getDecimal(int array[]) {
+    string result;
+    int power = 0;
+    for(int i = sizeof(array); i >= 0; i--) {
+        int powerIter = power;
+        string powered = "27";
+        while(powerIter > 0) {
+           powered = multiply(powered, to_string(27));
+           powerIter--;
+        }
+        power++;
+        if(powered != "0") {
+            powered = multiply(powered, to_string(array[i]));
+            result = findSum(result, powered);
+        }
+        cout << "CURRENT RESULT: " << result << '\n';
+        // result = result + (array[i] * pow(27, power));
+        // the below line is edited-out code for only debugging purposes.
+        // std::cout << "POWER" << power << " ARRAY ELEMENT" << array[i] << " INDEX" << i << " CURRENTRESULT" << result << '\n';
+    }
+    return result;
+}
+
+string runDecrypt(string message, unordered_map<unsigned long long int, char> IITACREAB) {
+    int power = 0;
+    int size = message.size();
+    unsigned long long int decryptArray[size];
+    string strM; // string message
+    int index = 0;
+    while(message != "0") {
+        string divided = longDivision(message, 27);
+        decryptArray[index] = stoull(message) % 27;
+        message = divided;
+        std::cout << "message num: " << decryptArray[index] << '\n';
+        index++;
+    }
+    int stringI = 0; // index for character position for our string output
+    for(index-1; index >= 0; index--) {
+        unsigned long long int base27 = decryptArray[index];
+        strM += IITACREAB[base27];
+        stringI++;
+        // the below line is edited-out code for only debugging purposes.
+        // std::cout << "POWER" << power << " ARRAY ELEMENT" << array[i] << " INDEX" << i << " CURRENTRESULT" << result << '\n';
+    }
+    return strM;
+}
+
 
 
 int main() 
@@ -165,17 +260,17 @@ int main()
     double track;
     double phi= (p-1)*(q-1);//calculate phi
 
-    cout << "Please enter a string to be encrypted and decryped:";
+    std::cout << "Please enter a string to be encrypted and decryped:";
     cin >> M;
     transform(M.begin(), M.end(), M.begin(), ::tolower);
-    cout << "You have entered:" << M << '\n';
+    std::cout << "You have entered:" << M << '\n';
     cin.clear();
     int * stringArray = getArray(M, BEARCATII);
-    unsigned long long int stringDecimal = getDecimal(stringArray); // decimalized string
-    cout << "The base 27 decimal is: " << stringDecimal << '\n';
+    string stringDecimal = getDecimal(stringArray); // decimalized string
+    std::cout << "The base 27 decimal is: " << stringDecimal << '\n';
     //e = public key
     long double e;
-    cout << "Type a positive integer for public key 'e': "; // Type a number and press enter
+    std::cout << "Type a positive integer for public key 'e': "; // Type a number and press enter
     cin >> e; // Get user input from the keyboard
     //for checking that 1 < e < phi(n) and gcd(e, phi(n)) = 1; i.e., e and phi(n) are coprime.
     while(e<phi) {
@@ -183,11 +278,11 @@ int main()
         if(track==1)
             break;
         else
-            cout << "That public key is not coprime. Please enter another: ";
+            std::cout << "That public key is not coprime. Please enter another: ";
             cin.clear();
             cin >> e;
     }
-     cout << "Your public key 'e' is: " << e << '\n'; // Display the input value 
+     std::cout << "Your public key 'e' is: " << e << '\n'; // Display the input value 
 
     //M = string received by user, M == P
     //e = public key
@@ -197,36 +292,40 @@ int main()
     //C = encrypted message
     //P = decrypted message, P == M
     //choose a d such that it satisfies d*e = 1 mod phi
-    double d1=1/e;
+    double d1=1.00/e;
     double decrypter = fmod(d1,phi);
-    cout << "decrypter teST: " << to_string(decrypter) << '\n';
-    string C = to_string(stringDecimal);
+    //std::cout << "decrypter teST: " << to_string(decrypter) << '\n';
+    string C = stringDecimal;
     // string encryptedC = to_string(pow(C, e)); //encrypt the message
     unsigned long long int exponent = e;
     while (exponent > 0) {
-        C = multiply(C, to_string(stringDecimal)); // C *= stringDecimal;
+        C = multiply(C, stringDecimal); // C *= stringDecimal;
         exponent --;
-        cout << "C TEST: " << C << '\n';
+       // std::cout << "C TEST: " << C << '\n';
     }
-    cout << "C: " << C << '\n';
-    // double P = pow(C,decrypter);
-    // C=fmod(C,n);
-    // P=fmod(P,n); // decrypted message
+    std::cout << "C: " << C << '\n';
+    string stringDecrypt = to_string(decrypter);
+    int cSize = C.size(); 
+    int decSize = stringDecrypt.size(); 
+
+    for(int i = decSize-1; i < cSize; i++) {
+        stringDecrypt.push_back('0');
+    }
     exponent = e;
     string decryptedC = C;
     while (exponent > 0) {
-        decryptedC = multiply(to_string(decrypter), decryptedC); 
+        decryptedC = multiply(decryptedC, stringDecrypt); 
         exponent --;
-        cout << "decryptedC TEST: " << decryptedC << '\n';
+       // std::cout << "decryptedC TEST: " << decryptedC << '\n';
     }
-    string P = runDecrypt(stoi(decryptedC), IITACREAB);
-    cout << "P: " << P << '\n';
-    cout << "M: " << M << '\n';
-    cout << "C: " << C << '\n';
-    cout << "e: " << e << '\n';
-    cout << "p: " << p << '\n';
-    cout << "q: " << q << '\n';
-    cout << "n: " << n << '\n';
+    string P = runDecrypt(stringDecimal, IITACREAB);
+    std::cout << "P: " << P << '\n';
+    std::cout << "M: " << M << '\n';
+    std::cout << "C: " << C << '\n';
+    std::cout << "e: " << e << '\n';
+    std::cout << "p: " << p << '\n';
+    std::cout << "q: " << q << '\n';
+    std::cout << "n: " << n << '\n';
 
     return 0;
 }

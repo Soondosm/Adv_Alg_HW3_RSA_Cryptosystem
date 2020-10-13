@@ -46,11 +46,13 @@ string runDecrypt(unsigned long long int message, unordered_map<char, int> BEARC
     int result = 0;
     int power = 0;
     int size = sqrt(sqrt(message));
-    int decryptArray [size];
+    int decryptArray[size];
+    string strM = ""; // string message
     // for(int i = sizeof(*array)-1; i >= 0; i--) {
     //     result = result + (array[i] * pow(27, power));
     //     power++; 
     // }
+    return strM;
 }
 
 int main() 

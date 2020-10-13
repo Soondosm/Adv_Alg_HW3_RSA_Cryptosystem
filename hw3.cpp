@@ -3,6 +3,7 @@
 #include<math.h> 
 #include <locale> 
 #include <string>
+#include <vector>
 
 using namespace std; 
 // find gcd
@@ -42,23 +43,98 @@ int getDecimal(int array[]) {
     return result;
 }
 
-string runDecrypt(unsigned long long int message, unordered_map<char, int> BEARCATII) {
-    int result = 0;
+string runDecrypt(int message, unordered_map<unsigned long long int, char> IITACREAB) {
     int power = 0;
-    int size = sqrt(sqrt(message));
-    int decryptArray[size];
-    string strM = ""; // string message
-    // for(int i = sizeof(*array)-1; i >= 0; i--) {
-    //     result = result + (array[i] * pow(27, power));
-    //     power++; 
-    // }
+    unsigned long long int size = sqrt(message);
+    unsigned long long int decryptArray[size];
+    string strM; // string message
+    int index = 0;
+    while(message > 0) {
+        unsigned long long int divided = message / 27;
+        decryptArray[index] = message % 27;
+        message = divided;
+        cout << "message num: " << decryptArray[index] << '\n';
+        index++;
+    }
+    int stringI = 0; // index for character position for our string output
+    for(index-1; index >= 0; index--) {
+        unsigned long long int base27 = decryptArray[index];
+        strM += IITACREAB[base27];
+        stringI++;
+        // the below line is edited-out code for only debugging purposes.
+        // cout << "POWER" << power << " ARRAY ELEMENT" << array[i] << " INDEX" << i << " CURRENTRESULT" << result << '\n';
+    }
     return strM;
 }
+
+// THIS FUNCTION IS PULLED FROM:
+// https://www.geeksforgeeks.org/multiply-large-numbers-represented-as-strings/
+// Multiplies str1 and str2, and prints result. 
+string multiply(string num1, string num2) 
+{ 
+    int len1 = num1.size(); 
+    int len2 = num2.size(); 
+    if (len1 == 0 || len2 == 0) 
+    return "0"; 
+    // will keep the result number in vector 
+    // in reverse order 
+    vector<int> result(len1 + len2, 0); 
+    // Below two indexes are used to find positions 
+    // in result.  
+    int i_n1 = 0;  
+    int i_n2 = 0;   
+    // Go from right to left in num1 
+    for (int i=len1-1; i>=0; i--) 
+    { 
+        int carry = 0; 
+        int n1 = num1[i] - '0'; 
+        // To shift position to left after every 
+        // multiplication of a digit in num2 
+        i_n2 = 0;  
+        // Go from right to left in num2              
+        for (int j=len2-1; j>=0; j--) 
+        { 
+            // Take current digit of second number 
+            int n2 = num2[j] - '0'; 
+            // Multiply with current digit of first number 
+            // and add result to previously stored result 
+            // at current position.  
+            int sum = n1*n2 + result[i_n1 + i_n2] + carry; 
+            // Carry for next iteration 
+            carry = sum/10; 
+            // Store result 
+            result[i_n1 + i_n2] = sum % 10; 
+            i_n2++; 
+        } 
+        // store carry in next cell 
+        if (carry > 0) 
+            result[i_n1 + i_n2] += carry; 
+  
+        // To shift position to left after every 
+        // multiplication of a digit in num1. 
+        i_n1++; 
+    } 
+    // ignore '0's from the right 
+    int i = result.size() - 1; 
+    while (i>=0 && result[i] == 0) 
+    i--; 
+    // If all were '0's - means either both or 
+    // one of num1 or num2 were '0' 
+    if (i == -1) 
+    return "0"; 
+    // generate the result string 
+    string s = ""; 
+    while (i >= 0) 
+        s += std::to_string(result[i--]); 
+    return s; 
+} 
+
 
 int main() 
     { 
     // key = char type, and mapped value = double type 
-    unordered_map<char, int> BEARCATII; 
+    unordered_map<char, int> BEARCATII;
+    unordered_map<unsigned long long int, char> IITACREAB; // just like the prev hashmap, but backwards (ints are keys, charas are vals) 
 
     // inserting values by using [] operator 
     BEARCATII[' '] = 0; BEARCATII['a'] = 1; BEARCATII['b'] = 2; 
@@ -70,6 +146,16 @@ int main()
     BEARCATII['r'] = 18; BEARCATII['s'] = 19; BEARCATII['t'] = 20; 
     BEARCATII['u'] = 21; BEARCATII['v'] = 22; BEARCATII['w'] = 23; 
     BEARCATII['x'] = 24; BEARCATII['y'] = 25; BEARCATII['z'] = 26; 
+
+    IITACREAB[0] = ' '; IITACREAB[1] = 'a'; IITACREAB[2] = 'b'; 
+    IITACREAB[3] = 'c'; IITACREAB[4] = 'd'; IITACREAB[5] = 'e'; 
+    IITACREAB[6] = 'f'; IITACREAB[7] = 'g'; IITACREAB[8] = 'h'; 
+    IITACREAB[9] = 'i';  IITACREAB[10] = 'j'; IITACREAB[11] = 'k'; 
+    IITACREAB[12] = 'l'; IITACREAB[13] = 'm'; IITACREAB[14] = 'n'; 
+    IITACREAB[15] = 'o'; IITACREAB[16] = 'p'; IITACREAB[17] = 'q'; 
+    IITACREAB[18] = 'r'; IITACREAB[19] = 's'; IITACREAB[20] = 't'; 
+    IITACREAB[21] = 'u'; IITACREAB[22] = 'v'; IITACREAB[23] = 'w'; 
+    IITACREAB[24] = 'x'; IITACREAB[25] = 'y'; IITACREAB[26] = 'z'; 
     string M = "TEST";
 
     //2 random prime numbers
@@ -88,7 +174,7 @@ int main()
     unsigned long long int stringDecimal = getDecimal(stringArray); // decimalized string
     cout << "The base 27 decimal is: " << stringDecimal << '\n';
     //e = public key
-    double e;
+    long double e;
     cout << "Type a positive integer for public key 'e': "; // Type a number and press enter
     cin >> e; // Get user input from the keyboard
     //for checking that 1 < e < phi(n) and gcd(e, phi(n)) = 1; i.e., e and phi(n) are coprime.
@@ -101,18 +187,46 @@ int main()
             cin.clear();
             cin >> e;
     }
-     cout << "Your public key 'e' is: " << e; // Display the input value 
+     cout << "Your public key 'e' is: " << e << '\n'; // Display the input value 
 
-    //private key
-    //d stands for decrypt
-    //choosing d such that it satisfies d*e = 1 mod phi
+    //M = string received by user, M == P
+    //e = public key
+    //p = prime number
+    //q = prime number
+    //n = pq
+    //C = encrypted message
+    //P = decrypted message, P == M
+    //choose a d such that it satisfies d*e = 1 mod phi
     double d1=1/e;
-    double decrypter=fmod(d1,phi);
-    unsigned long long int C = pow(stringDecimal,e); //encrypt the message
-    double P = pow(C,decrypter);
-    C=fmod(C,n);
-    P=fmod(P,n); // decrypted message
-    
+    double decrypter = fmod(d1,phi);
+    cout << "decrypter teST: " << to_string(decrypter) << '\n';
+    string C = to_string(stringDecimal);
+    // string encryptedC = to_string(pow(C, e)); //encrypt the message
+    unsigned long long int exponent = e;
+    while (exponent > 0) {
+        C = multiply(C, to_string(stringDecimal)); // C *= stringDecimal;
+        exponent --;
+        cout << "C TEST: " << C << '\n';
+    }
+    cout << "C: " << C << '\n';
+    // double P = pow(C,decrypter);
+    // C=fmod(C,n);
+    // P=fmod(P,n); // decrypted message
+    exponent = e;
+    string decryptedC = C;
+    while (exponent > 0) {
+        decryptedC = multiply(to_string(decrypter), decryptedC); 
+        exponent --;
+        cout << "decryptedC TEST: " << decryptedC << '\n';
+    }
+    string P = runDecrypt(stoi(decryptedC), IITACREAB);
+    cout << "P: " << P << '\n';
+    cout << "M: " << M << '\n';
+    cout << "C: " << C << '\n';
+    cout << "e: " << e << '\n';
+    cout << "p: " << p << '\n';
+    cout << "q: " << q << '\n';
+    cout << "n: " << n << '\n';
 
     return 0;
 }

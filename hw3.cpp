@@ -272,12 +272,10 @@ int main()
     
     // loop to place base 27 letters into number array
     int size = M.size();
-    cout << "mmmm" << size << '\n';
     int stringArray [size];
     for (int i = 0; i < M.size(); i++) {
         char element = M[i];
         stringArray[i] = BEARCATII[element];
-        cout << "array item: " << stringArray[i] << '\n';  
         }
 
     string stringDecimal = getDecimal(stringArray, size); // decimalized string

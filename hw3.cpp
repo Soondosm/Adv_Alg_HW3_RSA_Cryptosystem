@@ -4,6 +4,7 @@
 #include <locale> 
 #include <string>
 #include <vector>
+#include <algorithm>
 
 using namespace std; 
 
@@ -166,8 +167,8 @@ int gcd(int a, int b) {
    }
 }
 
-int * getArray(string M, unordered_map<char, int> BEARCATII) { // returns array of base 27 ints
-    int array [M.size()];
+int * getArray(string M, unordered_map<char, int> BEARCATII, int size) { // returns array of base 27 ints
+    int array [size];
     for (int i = 0; i < M.size(); i++) {
         char element = M[i];
         array[i] = BEARCATII[element];
@@ -267,15 +268,16 @@ int main()
     double phi= (p-1)*(q-1);//calculate phi
 
     std::cout << "Please enter a string to be encrypted and decryped:";
-    cin >> M;
+    getline(cin, M);
+    //std::cin >> M;
     transform(M.begin(), M.end(), M.begin(), ::tolower);
     std::cout << "You have entered:" << M << " of size " << M.size() << '\n';
     cin.clear();
     
     // loop to place base 27 letters into number array
     const int size = M.size(); // size of string
-    int stringArray [M.size()];
-    for (int i = 0; i < M.size(); i++) {
+    int stringArray [size];
+    for (int i = 0; i < size; i++) {
         char element = M[i];
         stringArray[i] = BEARCATII[element];
         }

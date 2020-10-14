@@ -7,6 +7,7 @@
 
 using namespace std; 
 
+
 // IMPORTED FUNCTIONS:
 
 // FUNCTION OBTAINED FROM:
@@ -146,8 +147,12 @@ string multiply(string num1, string num2) {
 } 
 
 
-// ---------------------------------END IMPORTED FUNCTIONS---------------------
+// -----------------------------END IMPORTED FUNCTIONS---------------------
 
+
+bool millerRabin(unsigned long long int num) {
+
+}
 
 
 // find gcd
@@ -163,8 +168,8 @@ int gcd(int a, int b) {
 }
 
 int * getArray(string M, unordered_map<char, int> BEARCATII) { // returns array of base 27 ints
-    static int array [sizeof(M)];
-    for (int i = 0; i < sizeof(M); i++) {
+    int array [M.size()];
+    for (int i = 0; i < M.size(); i++) {
         char element = M[i];
         array[i] = BEARCATII[element];
         cout << "array item: " << array[i] << '\n';  
@@ -176,25 +181,28 @@ int * getArray(string M, unordered_map<char, int> BEARCATII) { // returns array 
  * Converts base 27 sequence of "TEST" string into a single decimal.
  * @param int array. Array of base 27 ints obtained from converting string into
  * base27. */
-string getDecimal(int array[]) {
-    string result;
+string getDecimal(int array[], int size) {
+    string result = "0";
     int power = 0;
-    for(int i = sizeof(array); i >= 0; i--) {
+    for(int i = size-1; i >= 0; i--) {
         int powerIter = power;
         string powered = "27";
-        while(powerIter > 0) {
+        //int arrayItem = array[i]; string element = to_string(arrayItem);
+        string element = to_string(array[i]);
+        while(powerIter > 1) {
            powered = multiply(powered, to_string(27));
            powerIter--;
         }
-        power++;
-        if(powered != "0") {
-            powered = multiply(powered, to_string(array[i]));
-            result = findSum(result, powered);
+        if(power == 1) {
+            //powered = multiply(powered, to_string(array[i]));
+            element = multiply(to_string(array[i]), "27");
+        }  else if(power > 1) {
+            element = multiply(to_string(array[i]), powered);
         }
-        cout << "CURRENT RESULT: " << result << '\n';
-        // result = result + (array[i] * pow(27, power));
-        // the below line is edited-out code for only debugging purposes.
-        // std::cout << "POWER" << power << " ARRAY ELEMENT" << array[i] << " INDEX" << i << " CURRENTRESULT" << result << '\n';
+        result = findSum(result, element);
+        cout << "power at" << power << ", result" << result << ", element" << to_string(array[i]) << '\n';
+        element = "0";
+        power++;
     }
     return result;
 }
@@ -202,7 +210,7 @@ string getDecimal(int array[]) {
 string runDecrypt(string message, unordered_map<unsigned long long int, char> IITACREAB) {
     int power = 0;
     int size = message.size();
-    unsigned long long int decryptArray[size];
+    unsigned long long int decryptArray[size-1];
     string strM; // string message
     int index = 0;
     while(message != "0") {
@@ -213,9 +221,10 @@ string runDecrypt(string message, unordered_map<unsigned long long int, char> II
         index++;
     }
     int stringI = 0; // index for character position for our string output
-    for(index-1; index >= 0; index--) {
-        unsigned long long int base27 = decryptArray[index];
+    for(index; index >= 0; index--) {
+        int base27 = decryptArray[index];
         strM += IITACREAB[base27];
+        cout << "strM: " << strM << ", base: " << base27 << '\n';
         stringI++;
         // the below line is edited-out code for only debugging purposes.
         // std::cout << "POWER" << power << " ARRAY ELEMENT" << array[i] << " INDEX" << i << " CURRENTRESULT" << result << '\n';
@@ -251,7 +260,7 @@ int main()
     IITACREAB[18] = 'r'; IITACREAB[19] = 's'; IITACREAB[20] = 't'; 
     IITACREAB[21] = 'u'; IITACREAB[22] = 'v'; IITACREAB[23] = 'w'; 
     IITACREAB[24] = 'x'; IITACREAB[25] = 'y'; IITACREAB[26] = 'z'; 
-    string M = "TEST";
+    string M;
 
     //2 random prime numbers
     double p = 13;
@@ -263,10 +272,20 @@ int main()
     std::cout << "Please enter a string to be encrypted and decryped:";
     cin >> M;
     transform(M.begin(), M.end(), M.begin(), ::tolower);
-    std::cout << "You have entered:" << M << '\n';
+    std::cout << "You have entered:" << M << " of size " << M.size() << '\n';
     cin.clear();
-    int * stringArray = getArray(M, BEARCATII);
-    string stringDecimal = getDecimal(stringArray); // decimalized string
+    
+    // loop to place base 27 letters into number array
+    int size = M.size();
+    cout << "mmmm" << size << '\n';
+    int stringArray [size];
+    for (int i = 0; i < M.size(); i++) {
+        char element = M[i];
+        stringArray[i] = BEARCATII[element];
+        cout << "array item: " << stringArray[i] << '\n';  
+        }
+
+    string stringDecimal = getDecimal(stringArray, size); // decimalized string
     std::cout << "The base 27 decimal is: " << stringDecimal << '\n';
     //e = public key
     long double e;

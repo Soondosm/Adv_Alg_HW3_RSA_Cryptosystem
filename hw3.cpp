@@ -122,7 +122,6 @@ string multiply(string num1, string num2) {
             // Store result 
             result[i_n1 + i_n2] = sum % 10; 
             i_n2++; 
-            //std::cout << "n1:" << n1 << ", n2:" << n2 << '\n';         DEBUG
         } 
         // store carry in next cell 
         if (carry > 0) 
@@ -172,7 +171,6 @@ int * getArray(string M, unordered_map<char, int> BEARCATII) { // returns array 
     for (int i = 0; i < M.size(); i++) {
         char element = M[i];
         array[i] = BEARCATII[element];
-        cout << "array item: " << array[i] << '\n';  
         }
     return array;
 }
@@ -200,7 +198,6 @@ string getDecimal(int array[], int size) {
             element = multiply(to_string(array[i]), powered);
         }
         result = findSum(result, element);
-        cout << "power at" << power << ", result" << result << ", element" << to_string(array[i]) << '\n';
         element = "0";
         power++;
     }
@@ -217,14 +214,12 @@ string runDecrypt(string message, unordered_map<unsigned long long int, char> II
         string divided = longDivision(message, 27);
         decryptArray[index] = stoull(message) % 27;
         message = divided;
-        std::cout << "message num: " << decryptArray[index] << '\n';
         index++;
     }
     int stringI = 0; // index for character position for our string output
     for(index; index >= 0; index--) {
-        int base27 = decryptArray[index];
+        int base27 = decryptArray[index-1];
         strM += IITACREAB[base27];
-        cout << "strM: " << strM << ", base: " << base27 << '\n';
         stringI++;
         // the below line is edited-out code for only debugging purposes.
         // std::cout << "POWER" << power << " ARRAY ELEMENT" << array[i] << " INDEX" << i << " CURRENTRESULT" << result << '\n';

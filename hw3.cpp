@@ -1,6 +1,6 @@
 #include <iostream> 
 #include <unordered_map>
-#include<math.h> 
+#include <math.h> 
 #include <locale> 
 #include <string>
 #include <vector>
@@ -258,8 +258,10 @@ int main()
     string M;
 
     //2 random prime numbers
-    double p = 13;
-    double q = 11;
+    //
+    double p = 13;  // HERE IS WHERE THE FUNCTION TO GENERATEPRIME
+    double q = 11;  // AND MILLER RABIN NEED TO BE CALLED, (MODIFY)
+    ///
     double n=p*q;//calculate n
     double track;
     double phi= (p-1)*(q-1);//calculate phi
@@ -271,8 +273,8 @@ int main()
     cin.clear();
     
     // loop to place base 27 letters into number array
-    int size = M.size();
-    int stringArray [size];
+    const int size = M.size(); // size of string
+    int stringArray [M.size()];
     for (int i = 0; i < M.size(); i++) {
         char element = M[i];
         stringArray[i] = BEARCATII[element];
@@ -290,7 +292,7 @@ int main()
         if(track==1)
             break;
         else
-            std::cout << "That public key is not coprime. Please enter another: ";
+            std::cout << "That public key is not coprime with phi value " << phi << ". Please enter another: ";
             cin.clear();
             cin >> e;
     }
@@ -306,23 +308,17 @@ int main()
     //choose a d such that it satisfies d*e = 1 mod phi
     double d1=1.00/e;
     double decrypter = fmod(d1,phi);
-    //std::cout << "decrypter teST: " << to_string(decrypter) << '\n';
     string C = stringDecimal;
-    // string encryptedC = to_string(pow(C, e)); //encrypt the message
     unsigned long long int exponent = e;
     while (exponent > 0) {
         C = multiply(C, stringDecimal); // C *= stringDecimal;
         exponent --;
-       // std::cout << "C TEST: " << C << '\n';
     }
-    std::cout << "C: " << C << '\n';
-    string stringDecrypt = to_string(decrypter);
+    std::cout << "C: " << C << '\n';  
+    string stringDecrypt = to_string(decrypter); // decrypt this! (MODIFY)
     int cSize = C.size(); 
     int decSize = stringDecrypt.size(); 
 
-    for(int i = decSize-1; i < cSize; i++) {
-        stringDecrypt.push_back('0');
-    }
     exponent = e;
     string decryptedC = C;
     while (exponent > 0) {

@@ -150,9 +150,65 @@ string multiply(string num1, string num2) {
 // -----------------------------END IMPORTED FUNCTIONS---------------------
 
 
-bool millerRabin(unsigned long long int num) {
 
+bool miller_rabin(int a, int nk, int n) {
+	if (n < 1) {
+		return false;
+	}
+	else if ((pow(a, nk) != -1) || (pow(a, nk) != 1)) {
+		return false;
+	}
+	else if ((pow(a, nk) == 1) && fmod(nk,2) == 0) {
+		return miller_rabin(a, nk / 2, n);
+	}
+	else return true;
 }
+
+
+bool primality_test(int n) {    // this algorithm works for n>3
+	int a = 0;
+	while (a < 2 || (fmod(a, n) == 0 && n > 4)) {
+		a = rand() % (n-2);
+	}
+	if (n < 2 || n%2 ==0 || fmod(pow(a, (n - 1)), n) != 1) {
+		return false;
+	}
+	else if (fmod(n, 2) == 0) {
+		return miller_rabin(a, (n - 1)/2, n);
+	}
+	else return true;
+}
+
+pair<unsigned long long int, unsigned long long int> create_two_large_primes() {
+    pair<unsigned long long int, unsigned long long int> primes;
+    unsigned long long int max = 99;
+    bool pPrime = false;
+    bool qPrime = false;
+    while(pPrime == false) {
+        primes.first = rand() % max;
+        pPrime = primality_test(primes.first);
+        srand(time(NULL));
+    }
+    while(qPrime == false) {
+        primes.second = rand() % max;
+        qPrime = primality_test(primes.second);
+        cout << qPrime;
+        srand(time(NULL));
+    }
+    return primes;
+}
+
+unsigned long long int performRabin() {
+    pair<unsigned long long int, unsigned long long int> primes;
+    primes = create_two_large_primes();
+    unsigned long long int p = primes.first;
+    unsigned long long int q = primes.second;
+    cout << primes.first << " " << primes.second;
+    return p, q;
+}
+
+
+
 
 
 // find gcd
@@ -260,8 +316,9 @@ int main()
 
     //2 random prime numbers
     //
-    double p = 13;  // HERE IS WHERE THE FUNCTION TO GENERATEPRIME
-    double q = 11;  // AND MILLER RABIN NEED TO BE CALLED, (MODIFY)
+    // double p = 13;  // HERE IS WHERE THE FUNCTION TO GENERATEPRIME
+    // double q = 11;  // AND MILLER RABIN NEED TO BE CALLED, (MODIFY)
+    unsigned long long int p, q = performRabin();
     ///
     double n=p*q;//calculate n
     double track;

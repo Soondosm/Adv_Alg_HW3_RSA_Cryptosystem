@@ -152,7 +152,7 @@ string multiply(string num1, string num2) {
 
 
 bool miller_rabin(int a, int nk, int n) {
-	if (n < 1) {
+	if (nk < 1) {
 		return false;
 	}
 	else if ((pow(a, nk) != -1) || (pow(a, nk) != 1)) {
@@ -203,7 +203,6 @@ unsigned long long int performRabin() {
     primes = create_two_large_primes();
     unsigned long long int p = primes.first;
     unsigned long long int q = primes.second;
-    cout << primes.first << " " << primes.second;
     return p, q;
 }
 
@@ -315,9 +314,6 @@ int main()
     string M;
 
     //2 random prime numbers
-    //
-    // double p = 13;  // HERE IS WHERE THE FUNCTION TO GENERATEPRIME
-    // double q = 11;  // AND MILLER RABIN NEED TO BE CALLED, (MODIFY)
     unsigned long long int p, q = performRabin();
     ///
     double n=p*q;//calculate n
